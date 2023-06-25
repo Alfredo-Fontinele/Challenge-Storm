@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Challenge {
+  id          String   @id @default(uuid())
+  url         String
+  description String
+  createdAt   DateTime @default(now())
+  sendAt      DateTime @default(now())
+  cancelAt    DateTime @default(now())
+  readAt      DateTime @default(now())
+  studentId   String
+  student     Student  @relation(fields: [studentId], references: [id])
+
+  @@map("challenges")
+}
+
+model Student {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  challenges Challenge[]
+
+  @@map("students")
+}
